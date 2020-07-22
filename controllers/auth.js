@@ -3,7 +3,7 @@ const api = require('./apiFeatures')
 
 exports.signup = async (req, res, db) => {
     let data = req.body
-    const user = await db.collection('users').findOne({email: data.email})
+    const user = await db.collection('users').findOne({username: data.username})
     if (!user) {
         data.date = new Date().toISOString()
         data.password = bcrypt.hashSync(req.body.password, 10)
@@ -20,7 +20,7 @@ exports.signup = async (req, res, db) => {
 
 exports.login = async (req, res, db) => {
     let data = req.body
-    const user = await db.collection('users').findOne({email: data.email})
+    const user = await db.collection('users').findOne({username: data.username});
     if (user) {
         if (await api.checkPass(data.password, user.password)) {
             api.sendToken(user, 200, res)
